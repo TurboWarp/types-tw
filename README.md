@@ -5,10 +5,10 @@ This is a fork of [@turbowarp/types](https://github.com/TurboWarp/types) with ad
 Install with:
 
 ```
-npm install @turbowarp/types-tw
+npm install @turbowarp/types@git:https://github.com/TurboWarp/types-tw.git
 ```
 
-Then use in the same way as @turbowarp/types, but replace @turbowarp/types with @turbowarp/types-tw.
+Then use in the same way as @turbowarp/types.
 
 <!--
 # Type definitions for the Scratch VM and editor
