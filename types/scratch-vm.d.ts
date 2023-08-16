@@ -57,6 +57,34 @@ declare namespace VM {
     canReadClipboard(): Awaitable<boolean>;
     canNotify(): Awaitable<boolean>;
   }
+  interface FontManager {
+    runtime: Runtime;
+    fonts: Array<{
+      system: boolean;
+      family: string;
+      fallback: string;
+      asset?: ScratchStorage.Asset
+    }>;
+    isValidFamily(family: string): boolean;
+    hasFont(family: string): boolean;
+    getSafeName(family: string): string;
+    changed(): void;
+    addSystemFont(family: string, fallback: string): void;
+    addCustomFont(family: string, fallback: string, asset: ScratchStorage.Asset): void;
+    getFonts(): Array<{
+      system: boolean;
+      name: string;
+      family: string;
+      data: Uint8Array | null,
+      format: string | null
+    }>;
+    deleteFont(index: number): void;
+    clear(): void;
+    updateRenderer(): void;
+    serializeJSON(): unknown;
+    serializeAssets(): ScratchStorage.Asset[];
+    deserialize(json: unknown, zip?: JSZip, keepExisting?: boolean): Promise<void>;
+  }
 
   /**
    * Indicates the type is dependent on the existence of a renderer.
@@ -1158,6 +1186,7 @@ declare namespace VM {
     externalCommunicationMethods: Record<string, boolean>;
     enforcePrivacy: boolean;
     extensionManager: ExtensionManager;
+    fontManager: FontManager;
     emitCompileError(target: Target, error: unknown): void;
     setFramerate(framerate: number): void;
     setInterpolation(interpolation: boolean): void;

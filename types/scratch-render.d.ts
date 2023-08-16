@@ -419,6 +419,9 @@ declare class RenderWebGL extends EventEmitter<RenderWebGL.ScratchRenderEventMap
   markSkinAsPrivate(skinId: number): void;
   skinWasAltered(skin: RenderWebGL.Skin): void;
   createTextWrapper(measurementProvider: RenderWebGL.CanvasMeasurementProvider): RenderWebGL.TextWrapper;
+  customFonts: Record<string, string>;
+  _customFontStyles: HTMLStyleElement | null;
+  setCustomFonts(customFonts: Record<string, string>): void;
   exports: {
     twgl: object, // TODO
     Drawable: {

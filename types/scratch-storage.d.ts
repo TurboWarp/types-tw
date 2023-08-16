@@ -3,6 +3,12 @@
 
 declare namespace ScratchStorage {
   enum DataFormat {
+    // TW
+    TTF = 'ttf',
+    OTF = 'otf',
+    WOFF = 'woff',
+    WOFF2 = 'woff2',
+
     JPG = 'jpg',
     JSON = 'json',
     MP3 = 'mp3',
@@ -20,6 +26,9 @@ declare namespace ScratchStorage {
     immutable: true;
   }
   namespace AssetType {
+    // TW
+    const Font: AssetType;
+
     const ImageBitmap: AssetType;
     const ImageVector: AssetType;
     const Project: AssetType;
