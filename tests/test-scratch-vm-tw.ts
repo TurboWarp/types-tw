@@ -17,3 +17,27 @@ const RenderedTarget = vm.exports.RenderedTarget;
 const sprite = new Sprite(null, vm.runtime);
 const target = new RenderedTarget(sprite, vm.runtime);
 target.setXY(10, 10);
+
+Scratch.translate("enter AR mode") as string;
+Scratch.translate({
+  id: 'test1',
+  default: 'Message 1: {var}',
+  description: 'Description'
+}, {
+  var: 'test'
+}) as string;
+Scratch.translate({
+  id: "sync",
+  default: "Change the location of [STR] to [STR2]",
+}) as string;
+
+Scratch.translate.setup({
+  it: {
+    addValueInList: "xyz [VALUE] fgh [LIST]",
+    clearList: "!!! [LIST]"
+  },
+  "zh-cn":{
+    copyList: "aaa [LIST1] bbb [LIST2]",
+    name: "ccc"
+  }
+});

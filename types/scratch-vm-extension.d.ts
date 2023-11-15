@@ -59,6 +59,15 @@ declare namespace Scratch {
     function toListIndex(index: unknown, length: number, acceptAll: true): number | 'INVALID' | 'ALL';
     function toListIndex(index: unknown, length: number, acceptAll: boolean): number | 'INVALID' | 'ALL';
   }
+  type TranslatableString = string | {
+    id?: string;
+    default: string;
+    description?: string;
+  }
+  function translate(string: TranslatableString, variables?: Record<string, string>): string;
+  namespace translate {
+    function setup(translations: Record<string, Record<string, string>>): void;
+  }
 
   // Note that the 'B' in the BOOLEAN enums are capitalized in Scratch. It is not a typo in this file.
 
