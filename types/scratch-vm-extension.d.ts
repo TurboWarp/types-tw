@@ -67,6 +67,8 @@ declare namespace Scratch {
   function translate(string: TranslatableString, variables?: Record<string, string>): string;
   namespace translate {
     function setup(translations: Record<string, Record<string, string>>): void;
+    /** Current language. May change while the project runs. Possible values: "en", "es", "it", etc. */
+    let language: string;
   }
 
   // Note that the 'B' in the BOOLEAN enums are capitalized in Scratch. It is not a typo in this file.
