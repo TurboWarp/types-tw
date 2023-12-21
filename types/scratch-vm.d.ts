@@ -996,7 +996,7 @@ declare namespace VM {
   interface UserData {
     _username: string;
     getUsername(): string;
-    postData(data: UserData): void;
+    postData(data: UserDataData): void;
   }
 
   interface VideoProvider {
