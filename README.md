@@ -2,6 +2,8 @@
 
 This is a fork of [@turbowarp/types](https://github.com/TurboWarp/types) with additional types for TurboWarp's Scratch forks.
 
+A possibly more human-readable version of the TypeScript definitions can be found at: https://turbowarp.github.io/types-tw/
+
 Install with:
 
 ```
