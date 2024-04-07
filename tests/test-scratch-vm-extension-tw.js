@@ -139,3 +139,12 @@ Scratch.fetch('https://example.com', {
     'Content-Type': 'application/json'
   }
 });
+
+Scratch.gui.getBlockly().then((ScratchBlocks) => {
+  ScratchBlocks.getMainWorkspace()?.blockDB_;
+  ScratchBlocks.Workspace;
+});
+Scratch.gui.getBlocklyEagerly().then((ScratchBlocks) => {
+  ScratchBlocks.getMainWorkspace()?.blockDB_;
+  ScratchBlocks.Workspace;
+});

@@ -170,7 +170,7 @@ declare namespace ScratchBlocks {
 
   }
 
-  interface RealBlockly {
+  interface RealBlockly extends BlocklyGlobal {
     Workspace: WorkspaceConstructor;
     WorkspaceSvg: typeof WorkspaceSvg;
   }

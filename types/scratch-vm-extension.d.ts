@@ -70,6 +70,28 @@ declare namespace Scratch {
     /** Current language. May change while the project runs. Possible values: "en", "es", "it", etc. */
     let language: string;
   }
+  /**
+   * Only available when run in a scratch-gui environment (website, desktop app).
+   * In other environments (packager), will be undefined.
+   */
+  namespace gui {
+    /**
+     * Lazily get the internal ScratchBlocks object when it becomes available. It may never be
+     * available if, for example, the user never enters the editor.
+     *
+     * ScratchBlocks becoming available does not necessarily mean the user is in the editor due
+     * to getBlocklyEagerly() also existing.
+     */
+    function getBlockly(): Promise<ScratchBlocks.RealBlockly>;
+    /**
+     * Get the internal ScratchBlocks object as soon as possible. This lets you access it even
+     * if the user never enters the editor.
+     *
+     * This method is VERY SLOW and will cause A LOT OF CPU AND NETWORK ACTIVITY because it
+     * downloads and evaluates all of scratch-blocks, a multi-megabyte JavaScript bundle.
+     */
+    function getBlocklyEagerly(): Promise<ScratchBlocks.RealBlockly>;
+  }
 
   // Note that the 'B' in the BOOLEAN enums are capitalized in Scratch. It is not a typo in this file.
 
