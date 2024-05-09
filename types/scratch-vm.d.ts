@@ -1210,6 +1210,10 @@ declare namespace VM {
     setEnforcePrivacy(enforcePrivacy: boolean): void;
     setExternalCommunicationMethod(method: string, enabled: boolean): void;
     updatePrivacy(): void;
+    platform: {
+      name: string;
+      url: string;
+    };
 
     /**
      * Start the runtime's event loop. This doesn't start any scripts.
