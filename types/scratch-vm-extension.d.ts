@@ -114,6 +114,7 @@ declare namespace Scratch {
   namespace BlockType {
     // TW
     const LABEL: 'label';
+    const XML: 'xml';
 
     const BOOLEAN: 'Boolean';
     const BUTTON: 'button';
@@ -214,6 +215,10 @@ declare namespace Scratch {
   interface LabelBlock extends AbstractBlock {
     blockType: 'label';
   }
+  interface XMLBlock extends AbstractBlock {
+    blockType: 'xml';
+    xml: string;
+  }
 
   interface AbstractBlock {
     text: string | string[];
@@ -295,6 +300,7 @@ declare namespace Scratch {
   type Block = (
     // TW
     LabelBlock |
+    XMLBlock |
 
     BooleanBlock |
     ButtonBlock |
