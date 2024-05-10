@@ -148,3 +148,7 @@ Scratch.gui.getBlocklyEagerly().then((ScratchBlocks) => {
   ScratchBlocks.getMainWorkspace()?.blockDB_;
   ScratchBlocks.Workspace;
 });
+
+Scratch.vm.runtime.fontManager.on('change', () => {
+
+});

@@ -57,7 +57,10 @@ declare namespace VM {
     canReadClipboard(): Awaitable<boolean>;
     canNotify(): Awaitable<boolean>;
   }
-  interface FontManager {
+  interface FontManagerEvents {
+    change: [];
+  }
+  interface FontManager extends EventEmitter<FontManagerEvents> {
     runtime: Runtime;
     fonts: Array<{
       system: boolean;
