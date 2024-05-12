@@ -97,10 +97,6 @@
                 type: Scratch.ArgumentType.COSTUME
               }
             }
-          },
-          {
-            blockType: Scratch.BlockType.XML,
-            xml: '<></>'
           }
         ]
       };
