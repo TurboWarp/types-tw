@@ -68,9 +68,15 @@ declare namespace VM {
       fallback: string;
       asset?: ScratchStorage.Asset
     }>;
+    restrictedFonts: Set<string>;
+    restrictFont(font: string): void;
+    isValidSystemFont(family: string): boolean;
+    isValidCustomFont(family: string): boolean;
+    /** @deprecated use isValidSystemFont or isValidCustomFont instead */
     isValidFamily(family: string): boolean;
+    getUnusedSystemFont(family: string): string;
+    getUnusedCustomFont(family: string): string;
     hasFont(family: string): boolean;
-    getSafeName(family: string): string;
     changed(): void;
     addSystemFont(family: string, fallback: string): void;
     addCustomFont(family: string, fallback: string, asset: ScratchStorage.Asset): void;
