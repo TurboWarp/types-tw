@@ -857,7 +857,10 @@ declare namespace VM {
 
     runtime: Runtime;
 
-    refreshBlocks(): Promise<void[]>;
+    /**
+     * @param extensionId Specified which extension to refresh. Added by TW.
+     */
+    refreshBlocks(extensionId?: string): Promise<void[]>;
 
     isExtensionLoaded(extensionID: string): boolean;
 
