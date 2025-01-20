@@ -64,3 +64,9 @@ target.extensionStorage['stretch'] = [
   }
 ];
 vm.runtime.extensionStorage['a'] = 'b';
+
+const promptResult = prompt('what is your name');
+promptResult as Promise<string>;
+promptResult as Promise<null>;
+promptResult as string;
+promptResult as null;

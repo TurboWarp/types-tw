@@ -15,6 +15,11 @@
  * reference error, not return undefined (TypeScript does not let us type that unfortunately)
  */
 declare const scaffolding: unknown | undefined;
+/**
+ * In desktop app, prompt() returns a Promise. Thus you should always do `await prompt(...)` which
+ * will work in all environments.
+ */
+declare function prompt(message?: string, _default?: string): string | null | Promise<string | null>;
 
 declare namespace Scratch {
   // TW
