@@ -94,6 +94,13 @@ declare namespace VM {
     serializeAssets(): ScratchStorage.Asset[];
     deserialize(json: unknown, zip?: JSZip, keepExisting?: boolean): Promise<void>;
   }
+  // https://github.com/microsoft/TypeScript/pull/33050#issue-484549713
+  type JSONSerializable = string | number | boolean | null | JSONSerializable[] | { [key: string]: JSONSerializable };
+  /**
+   * Maps extension ID to arbitrary data storage.
+   * The data must be JSON-serializable to avoid data loss on serialization and deserialization.
+   */
+  type ExtensionStorage = Record<string, JSONSerializable>;
 
   /**
    * Indicates the type is dependent on the existence of a renderer.
@@ -373,6 +380,9 @@ declare namespace VM {
   }
 
   interface BaseTarget extends EventEmitter<RenderedTargetEventMap> {
+    // TW
+    extensionStorage: ExtensionStorage;
+
     runtime: Runtime;
 
     id: string;
@@ -1226,6 +1236,7 @@ declare namespace VM {
       name: string;
       url: string;
     };
+    extensionStorage: ExtensionStorage;
 
     /**
      * Start the runtime's event loop. This doesn't start any scripts.

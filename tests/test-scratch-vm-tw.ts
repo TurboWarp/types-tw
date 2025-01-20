@@ -41,3 +41,26 @@ Scratch.translate.setup({
     name: "ccc"
   }
 });
+
+target.extensionStorage['stretch'] = '';
+target.extensionStorage['stretch'] = ['a'];
+target.extensionStorage['stretch'] = {b: 'a'};
+target.extensionStorage['stretch'] = [
+  {
+    b: [
+      1,
+      true,
+      false,
+      null,
+      'a',
+      [
+        {
+          a: {
+            b: 'c'
+          }
+        }
+      ]
+    ]
+  }
+];
+vm.runtime.extensionStorage['a'] = 'b';
