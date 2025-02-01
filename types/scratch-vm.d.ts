@@ -94,7 +94,10 @@ declare namespace VM {
     serializeAssets(): ScratchStorage.Asset[];
     deserialize(json: unknown, zip?: JSZip, keepExisting?: boolean): Promise<void>;
   }
-  // https://github.com/microsoft/TypeScript/pull/33050#issue-484549713
+  /**
+   * Note that behavior of Infinity, -Infinity, and NaN is undefined.
+   * Implementation based on https://github.com/microsoft/TypeScript/pull/33050#issue-484549713
+   */
   type JSONSerializable = string | number | boolean | null | JSONSerializable[] | { [key: string]: JSONSerializable };
   /**
    * Maps extension ID to arbitrary data storage.
