@@ -1,0 +1,5 @@
+{
+    // We do this here instead of in package.json to reduce
+    // merge conflicts.
+    "name": "@turbowarp/types-tw"
+}
