@@ -33,3 +33,13 @@ wrapper.wrapText(50, 'hello');
 const overlay = renderer.addOverlay(document.createElement('div'), 'manual');
 overlay.mode = 'scale';
 renderer._updateOverlays();
+
+declare const textSkin: RenderWebGL.TextBubbleSkin;
+// @ts-expect-error
+textSkin._style.cornerRadius = 10;
+// @ts-expect-error
+textSkin._style = textSkin._style;
+textSkin.setStyle({
+    fontSize: 50,
+    lineHeight: 40
+});

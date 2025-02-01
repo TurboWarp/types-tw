@@ -12,6 +12,21 @@ declare namespace RenderWebGL {
     root: HTMLElement;
     userElement: HTMLElement;
   }
+  interface TextBubbleStyle {
+    maxLineWidth: number;
+    minWidth: number;
+    strokeWidth: number;
+    padding: number;
+    cornerRadius: number;
+    tailHeight: number;
+    font: string;
+    fontSize: number;
+    fontHeightRatio: number;
+    lineHeight: number;
+    bubbleFill: string;
+    bubbleStroke: string;
+    textFill: string;
+  }
 
   type AnyWebGLContext = WebGLRenderingContext | WebGL2RenderingContext;
 
@@ -252,6 +267,9 @@ declare namespace RenderWebGL {
   }
 
   class CanvasMeasurementProvider {
+    // TW
+    clearCache(): void;
+
     _ctx: CanvasRenderingContext2D;
     _cache: Record<string, number>;
     measureText(text: string): number;
@@ -274,6 +292,10 @@ declare namespace RenderWebGL {
   }
 
   class TextBubbleSkin extends Skin {
+    // TW
+    readonly _style: Readonly<TextBubbleStyle>;
+    setStyle(newStyles: Partial<TextBubbleStyle>): void;
+
     _renderer: RenderWebGL;
 
     _canvas: HTMLCanvasElement;
