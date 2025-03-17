@@ -1158,6 +1158,8 @@ declare namespace VM {
     // TW
     BEFORE_EXECUTE: [];
     AFTER_EXECUTE: [];
+    RUNTIME_PAUSED: [];
+    RUNTIME_UNPAUSED: [];
 
     PROJECT_STOP_ALL: [];
 
