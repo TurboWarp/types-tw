@@ -1391,7 +1391,8 @@ declare namespace VM {
 
     monitorBlocks: Blocks;
 
-    visualReport(blockId: string, value: any): void;
+    // TW: modified to require target as first argument
+    visualReport(target: Target, blockId: string, value: any): void;
 
     _primitives: Record<string, Function>;
 
