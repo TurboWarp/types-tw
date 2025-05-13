@@ -490,7 +490,8 @@ declare class RenderWebGL extends EventEmitter<RenderWebGL.ScratchRenderEventMap
    */
   static _getContext(canvas: HTMLCanvasElement): RenderWebGL.AnyWebGLContext | null;
 
-  static sampleColor3b(vector: twgl.V3, drawableIds: number[], destination?: Uint8ClampedArray): Uint8ClampedArray;
+  // TW: converted to instance method; returns 4th channel for alpha
+  sampleColor4b(vector: twgl.V3, drawableIds: number[], destination?: Uint8ClampedArray): Uint8ClampedArray;
 
   constructor(canvas: HTMLCanvasElement, xLeft?: number, xRight?: number, yBottom?: number, yTop?: number);
 
@@ -746,8 +747,9 @@ declare class RenderWebGL extends EventEmitter<RenderWebGL.ScratchRenderEventMap
    * @param red Red from 0-1
    * @param green Green from 0-1
    * @param blue Blue from 0-1
+   * @param alpha Alpha from 0-1, defaults to 1. (from TW)
    */
-  setBackgroundColor(red: number, green: number, blue: number): void;
+  setBackgroundColor(red: number, green: number, blue: number, alpha?: number): void;
 
   _snapshotCallbacks: Array<(dataURL: string) => void>;
   requestSnapshot(callback: (dataURL: string) => void): void;
