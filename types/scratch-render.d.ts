@@ -637,9 +637,9 @@ declare class RenderWebGL extends EventEmitter<RenderWebGL.ScratchRenderEventMap
    * @param width Defaults to 1
    * @param height Defaults to 1
    * @param candidateIds Defaults to all drawables
-   * @returns The ID of the top-most drawable, or -1 or false if there is none.
+   * @returns The ID of the top-most drawable, or -1 if there is none. (TW: returns false instead of -1 in Scratch)
    */
-  pick(centerX: number, centerY: number, width?: number, height?: number, candidateIds?: number[]): number | -1 | false;
+  pick(centerX: number, centerY: number, width?: number, height?: number, candidateIds?: number[]): number | -1;
 
   extractDrawableScreenSpace(drawableId: number): {
     data: ImageData;
