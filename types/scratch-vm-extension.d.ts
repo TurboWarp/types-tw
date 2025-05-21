@@ -101,6 +101,11 @@ declare namespace Scratch {
      */
     function getBlocklyEagerly(): Promise<ScratchBlocks.RealBlockly>;
   }
+  namespace BlockShape {
+    const HEXAGONAL: 1;
+    const ROUND: 2;
+    const SQUARE: 3;
+  }
 
   // Note that the 'B' in the BOOLEAN enums are capitalized in Scratch. It is not a typo in this file.
 
@@ -233,6 +238,7 @@ declare namespace Scratch {
     filter?: Array<'target' | 'sprite'>;
   }
   interface ExecutableBlock extends AbstractBlock {
+    blockShape?: 1 | 2 | 3; // TW
     opcode: string;
     func?: string;
     arguments?: Record<string, Argument>;

@@ -152,3 +152,25 @@ Scratch.gui.getBlocklyEagerly().then((ScratchBlocks) => {
 Scratch.vm.runtime.fontManager.on('change', () => {
 
 });
+
+Scratch.extensions.register({
+  getInfo() {
+    return {
+      id: 'AshimeeShapeTestThing',
+      name: 'AshimeeShapeTestThing',
+      blocks: [{
+        blockType: Scratch.BlockType.REPORTER,
+        blockShape: Scratch.BlockShape.HEXAGONAL,
+        opcode: 'hexagonal', text: 'im a reporter',
+      }, {
+        blockType: Scratch.BlockType.BOOLEAN,
+        blockShape: Scratch.BlockShape.ROUND,
+        opcode: 'round', text: 'im a boolean',
+      }, {
+        blockType: Scratch.BlockType.REPORTER,
+        blockShape: Scratch.BlockShape.SQUARE,
+        opcode: 'square', text: 'im a reporter (but square)',
+      }],
+    };
+  }
+});
