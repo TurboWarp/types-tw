@@ -1549,7 +1549,7 @@ declare class VM extends EventEmitter<VM.VirtualMachineEventMap> {
   setStageSize(width: number, height: number): void;
   setInEditor(inEditor: boolean): void;
   convertToPackagedRuntime(): void;
-  addAddonBlock(): void;
+  addAddonBlock(addonBlock: VM.AddonBlockOptions): void;
   getAddonBlock(procedureCode: string): VM.AddonBlock;
   storeProjectOptions(): void;
   enableDebug(): string;
