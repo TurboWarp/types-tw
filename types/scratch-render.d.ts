@@ -137,6 +137,7 @@ declare namespace RenderWebGL {
     // TW
     _renderer: RenderWebGL;
     emitWasAltered(): void;
+    private: boolean;
 
     _id: number;
     get id(): number;
@@ -328,6 +329,9 @@ declare namespace RenderWebGL {
   }
 
   class Drawable {
+    // TW
+    interactive: boolean;
+
     static color4fFromID(id: number): [number, number, number, number];
     static color3bToID(r: number, g: number, b: number): number;
     static sampleColor4b(coordinate: twgl.V3, drawable :Drawable, destination: Uint8ClampedArray, effectMask?: EffectMask): Uint8ClampedArray;
@@ -447,6 +451,7 @@ declare class RenderWebGL extends EventEmitter<RenderWebGL.ScratchRenderEventMap
   _updateRenderQuality(): void;
   setPrivateSkinAccess(enabled: boolean): void;
   markSkinAsPrivate(skinId: number): void;
+  markDrawableAsNoninteractive(drawableId: number): void;
   skinWasAltered(skin: RenderWebGL.Skin): void;
   createTextWrapper(measurementProvider: RenderWebGL.CanvasMeasurementProvider): RenderWebGL.TextWrapper;
   customFonts: Record<string, string>;
