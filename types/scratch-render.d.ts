@@ -138,6 +138,7 @@ declare namespace RenderWebGL {
     _renderer: RenderWebGL;
     emitWasAltered(): void;
     private: boolean;
+    isMetricsReady(): boolean;
 
     _id: number;
     get id(): number;
