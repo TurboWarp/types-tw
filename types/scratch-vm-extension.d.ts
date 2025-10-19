@@ -106,6 +106,39 @@ declare namespace Scratch {
     const ROUND: 2;
     const SQUARE: 3;
   }
+  namespace external {
+    /**
+     * Import an ES module, like import().
+     * May be inlined at build-time.
+     * @param url Must be absolute and constant.
+     */
+    function importModule<T = unknown>(url: string): Promise<T>;
+    /**
+     * Returns the contents of a resource, like fetch(). Response headers may be missing.
+     * May be inlined at build-time.
+     * @param url Must be absolute and constant.
+     */
+    function fetch(url: string): Promise<Response>;
+    /**
+     * Returns the contents of a resource as a data: URL.
+     * May be inlined at build-time.
+     * @param url Must be absolute and constant.
+     */
+    function dataURL(url: string): Promise<string>;
+    /**
+     * Returns the contents of a resource as a Blob.
+     * May be inlined at build-time.
+     * @param url Must be absolute and constant.
+     */
+    function blob(url: string): Promise<Blob>;
+    /**
+     * Fetch a script and then evaluate it in an IIFE, returning an expression of your choice.
+     * May be inlined at build-time.
+     * @param url Must be absolute and constant.
+     * @param returnExpression JS expression to return, usually a variable name but could be an object instead. Must be constant.
+     */
+    function evalAndReturn<T = unknown>(url: string, returnExpression: string): Promise<T> | T;
+  }
 
   // Note that the 'B' in the BOOLEAN enums are capitalized in Scratch. It is not a typo in this file.
 

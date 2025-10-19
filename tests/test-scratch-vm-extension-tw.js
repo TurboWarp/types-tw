@@ -174,3 +174,10 @@ Scratch.extensions.register({
     };
   }
 });
+
+Scratch.external.importModule(
+  "https://cdn.jsdelivr.net/npm/@mediapipe/face_detection@0.4.1646425229/face_detection.js"
+);
+Scratch.external.blob(
+  "https://cdn.jsdelivr.net/npm/@mediapipe/face_detection@0.4.1646425229/face_detection_short.binarypb"
+);
