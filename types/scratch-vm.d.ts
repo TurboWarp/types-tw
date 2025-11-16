@@ -979,6 +979,10 @@ declare namespace VM {
   }
 
   interface Keyboard {
+    // TW
+    _usedKeys: Set<string>;
+    hasUsedKey(scratchKey: string): boolean;
+
     runtime: Runtime;
     postData(data: KeyboardData): void;
     _keyStringToScratchKey(key: string): string;
