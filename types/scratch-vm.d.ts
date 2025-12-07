@@ -136,9 +136,9 @@ declare namespace VM {
     assetId: string;
 
     /**
-     * The md5 + file extension of this asset.
+     * The md5 + file extension of this asset. May be missing.
      */
-    md5: string;
+    md5?: string;
 
     name: string;
 
@@ -846,12 +846,33 @@ declare namespace VM {
     // TODO
   }
 
-  interface Profiler {
-    // TODO
+  interface ProfilerFrame {
+    id: number;
+    totalTime: number;
+    selfTime: number;
+    arg: unknown;
+    depth: number;
+    count: number;
   }
 
-  interface ProfilerFrame {
-    // TODO
+  type FrameCallback = (frame: ProfilerFrame) => void;
+
+  interface Profiler {
+    records: unknown[];
+    increments: ProfilerFrame[];
+    counters: ProfilerFrame[];
+    nullFrame: ProfilerFrame;
+    _stack: ProfilerFrame[];
+    onFrame: FrameCallback;
+    START: 0;
+    STOP: 1;
+    start(id: number, arg: unknown): void;
+    stop(): void;
+    increment(id: number): void;
+    frame(id: string, arg: unknown): ProfilerFrame;
+    reportFrames(): void;
+    idByName(name: string): number;
+    nameById(id: number): string;
   }
 
   interface Sequencer {
@@ -1360,7 +1381,7 @@ declare namespace VM {
 
     _stopThread(thread: Thread): void;
 
-    _restartThread(thread: Thread): void;
+    _restartThread(thread: Thread): Thread;
 
     /**
      * A thread is considered active if it is in the thread list and is not STATUS_DONE.
@@ -1378,7 +1399,7 @@ declare namespace VM {
 
     _getMonitorThreadCount(threads: Thread[]): number;
 
-    startHats(opcode: string, matchFields?: Record<string, unknown>, target?: Target): Thread[];
+    startHats(opcode: string, matchFields?: Record<string, unknown>, target?: Target): Thread[] | undefined;
 
     toggleScript(topBlockId: string, options?: {
       target?: string;

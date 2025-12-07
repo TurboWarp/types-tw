@@ -37,7 +37,7 @@ declare namespace ScratchStorage {
   }
 
   class Asset {
-    constructor(assetType: AssetType, assetId: string, dataFormat: DataFormat | null, data: ArrayBuffer, generateId?: boolean);
+    constructor(assetType: AssetType, assetId: string, dataFormat: DataFormat | null, data: Uint8Array, generateId?: boolean);
 
     assetType: AssetType;
 
@@ -48,7 +48,7 @@ declare namespace ScratchStorage {
      */
     assetId: string;
 
-    setData(data: ArrayBuffer, dataFormat: DataFormat, generateId?: boolean): void;
+    setData(data: Uint8Array, dataFormat: DataFormat, generateId?: boolean): void;
     encodeTextData(text: string, dataFormat: DataFormat, generateId?: boolean): void;
 
     decodeText(): string;
@@ -64,7 +64,7 @@ declare namespace ScratchStorage {
 
   interface Helper {
     load(assetType: AssetType, assetId: string, dataFormat: DataFormat): Promise<Asset>;
-    store(assetType: AssetType, dataFormat: DataFormat, data: ArrayBuffer, assetId: string): Promise<unknown>;
+    store(assetType: AssetType, dataFormat: DataFormat, data: Uint8Array, assetId: string): Promise<unknown>;
   }
 }
 
@@ -81,14 +81,14 @@ declare class ScratchStorage {
    */
   get(assetId: string): ScratchStorage.Asset | null;
 
-  cache(assetType: ScratchStorage.AssetType, dataFormat: ScratchStorage.DataFormat, data: ArrayBuffer, assetId: string): string;
+  cache(assetType: ScratchStorage.AssetType, dataFormat: ScratchStorage.DataFormat, data: Uint8Array, assetId: string): string;
 
   load(assetType: ScratchStorage.AssetType, assetId: string, dataFormat: ScratchStorage.DataFormat): Promise<ScratchStorage.Asset | null>;
 
-  store(assetType: ScratchStorage.Asset, dataFormat: ScratchStorage.DataFormat, data: ArrayBuffer, assetId: string): Promise<unknown>;
+  store(assetType: ScratchStorage.Asset, dataFormat: ScratchStorage.DataFormat, data: Uint8Array, assetId: string): Promise<unknown>;
 
-  createAsset(assetType: ScratchStorage.AssetType, dataFormat: ScratchStorage.DataFormat, data: ArrayBuffer, assetId: null, generateId: true): ScratchStorage.Asset;
-  createAsset(assetType: ScratchStorage.AssetType, dataFormat: ScratchStorage.DataFormat, data: ArrayBuffer, assetId: string, generateId?: boolean): ScratchStorage.Asset;
+  createAsset(assetType: ScratchStorage.AssetType, dataFormat: ScratchStorage.DataFormat, data: Uint8Array, assetId: null, generateId: true): ScratchStorage.Asset;
+  createAsset(assetType: ScratchStorage.AssetType, dataFormat: ScratchStorage.DataFormat, data: Uint8Array, assetId: string, generateId?: boolean): ScratchStorage.Asset;
 
   addWebStore(types: ScratchStorage.AssetType[], getFunction: ScratchStorage.UrlFunction, createFunction?: ScratchStorage.UrlFunction, updateFunction?: ScratchStorage.UrlFunction): void;
 
