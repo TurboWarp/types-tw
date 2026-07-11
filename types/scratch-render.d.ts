@@ -492,6 +492,8 @@ declare class RenderWebGL extends EventEmitter<RenderWebGL.ScratchRenderEventMap
       transformColor(drawable: RenderWebGL.Drawable, inOutColor: Uint8ClampedArray, effectMask?: number): Uint8ClampedArray;
     };
   }
+  maxTextureDimension: number;
+  _penSkinId: number | null;
 
   static isSupported(canvas?: HTMLCanvasElement): boolean;
 
