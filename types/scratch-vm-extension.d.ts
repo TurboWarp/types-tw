@@ -37,7 +37,7 @@ declare namespace Scratch {
   function canRecordVideo(): Promise<boolean>;
   function canReadClipboard(): Promise<boolean>;
   function canNotify(): Promise<boolean>;
-  function canEmbed(): Promise<boolean>;
+  function canEmbed(url: string): Promise<boolean>;
   function canDownload(url: string, name: string): Promise<boolean>;
   function download(url: string, name: string): Promise<void>;
   namespace Cast {
