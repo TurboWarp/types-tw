@@ -465,7 +465,7 @@ declare class RenderWebGL extends EventEmitter<RenderWebGL.ScratchRenderEventMap
   _overlays: RenderWebGL.Overlay[];
   _updateOverlays(): void;
   exports: {
-    twgl: object, // TODO
+    twgl: twgl;
     Drawable: {
       new(id: number, renderer: RenderWebGL): RenderWebGL.Drawable;
     };
