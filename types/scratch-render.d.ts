@@ -487,6 +487,10 @@ declare class RenderWebGL extends EventEmitter<RenderWebGL.ScratchRenderEventMap
     CanvasMeasurementProvider: {
       new(ctx: CanvasRenderingContext2D): RenderWebGL.CanvasMeasurementProvider;
     }
+    EffectTransform: {
+      transformPoint(drawable: RenderWebGL.Drawable, vec: twgl.V3, dst: twgl.V3): twgl.V3;
+      transformColor(drawable: RenderWebGL.Drawable, inOutColor: Uint8ClampedArray, effectMask?: number): Uint8ClampedArray;
+    };
   }
 
   static isSupported(canvas?: HTMLCanvasElement): boolean;
