@@ -27,11 +27,14 @@ declare namespace VM {
     runtime: Runtime;
     running: boolean;
     framerate: number;
-    interpolation: number;
+    interpolation: boolean;
     _stepAnimation?: {
       cancel(): void
     };
     _interpolationAnimation?: {
+      cancel(): void
+    };
+    _noopAnimation?: {
       cancel(): void
     };
     _stepInterval?: ReturnType<typeof setInterval>;
@@ -39,14 +42,16 @@ declare namespace VM {
     setInterpolation(interpolation: boolean): void;
     stepCallback(): void;
     interpolationCallback(): void;
+    noopCallback(): void;
     _restart(): void;
     start(): void;
     stop(): void;
   }
   interface AddonBlockOptions {
     procedureCode: string;
-    callback(args: Record<string, string | number | boolean>, util: BlockUtility): void;
-    arguments: string[];
+    callback(args: Record<string, string | number | boolean>, util: BlockUtility): void | Promise<void>;
+    arguments?: string[];
+    return?: 1 | 2;
     hidden?: boolean;
   }
   interface AddonBlock extends AddonBlockOptions {
@@ -63,6 +68,10 @@ declare namespace VM {
     canRecordVideo(): Awaitable<boolean>;
     canReadClipboard(): Awaitable<boolean>;
     canNotify(): Awaitable<boolean>;
+    rewriteExtensionURL(url: string): Awaitable<string>;
+    canGeolocate(): Awaitable<boolean>;
+    canEmbed(url: string): Awaitable<boolean>;
+    canDownload(url: string, name: string): Awaitable<boolean>;
   }
   interface FontManagerEvents {
     change: [];
@@ -76,6 +85,7 @@ declare namespace VM {
       asset?: ScratchStorage.Asset
     }>;
     restrictedFonts: Set<string>;
+    /** Prevents a family from being overridden by a custom font. The project may still use it as a system font. */
     restrictFont(font: string): void;
     isValidSystemFont(family: string): boolean;
     isValidCustomFont(family: string): boolean;
@@ -270,6 +280,16 @@ declare namespace VM {
   }
 
   interface Blocks {
+    // TW
+    /**
+     * Get the cached compilation result of a block.
+     * @returns Cached success or error, or null if there is no cached value.
+     */
+    getCachedCompileResult(blockId: string): {success: boolean; value: any} | null;
+    cacheCompileResult(blockId: string, value: unknown): void;
+    cacheCompileError(blockId: string, error: unknown): void;
+    populateProcedureCache(): void;
+
     runtime: Runtime;
 
     _blocks: Record<string, Block>;
@@ -575,9 +595,7 @@ declare namespace VM {
   }
 
   interface RenderedTargetEventMap {
-    TARGET_MOVED: [RenderedTarget, number, number, boolean?];
-
-    EVENT_TARGET_VISUAL_CHANGE: [RenderedTarget];
+    // TW: these events are replaced by properties
   }
 
   const enum Effect {
@@ -602,6 +620,19 @@ declare namespace VM {
   }
 
   interface RenderedTarget extends BaseTarget {
+    // TW
+    onTargetMoved: ((target: RenderedTarget, oldX: number, oldY: number, force: boolean) => void) | null;
+    interpolationData: {
+        x: number;
+        y: number;
+        direction: number;
+        scale: [number, number];
+        costume: number;
+        ghost: number;
+    } | null;
+    onTargetVisualChange: ((target: RenderedTarget) => void) | null;
+    emitVisualChange(): void;
+
     sprite: Sprite;
 
     renderer: IfRenderer<RenderWebGL, undefined>;
@@ -856,6 +887,9 @@ declare namespace VM {
   }
 
   interface StackFrame {
+    /** TW: Internal block object being executed. Not the same as the object found in target.blocks. */
+    op: unknown;
+
     isLoop: boolean;
     warpMode: boolean;
     justReported: unknown;
@@ -943,6 +977,11 @@ declare namespace VM {
     triedToCompile: boolean;
     generator: Generator | null;
     getId(): string;
+    procedures: Record<string, unknown> | null;
+    executableHat: boolean;
+    timer: Timer | null;
+    compatibilityStackFrame: Record<string, unknown> | null;
+    getAllparams(): unknown;
 
     topBlock: string;
     stack: string[];
@@ -1034,6 +1073,15 @@ declare namespace VM {
   interface ExtensionManager {
     // TW
     securityManager: SecurityManager;
+    /**
+     * Determine whether an extension with a given ID is built in to the VM, such as pen.
+     * Note that "core extensions" like motion will return false here.
+     */
+    isBuiltinExtension(extensionId: string): boolean;
+    addBuiltinExtension(extensionId: string, extensionClass: new (runtime: Runtime) => unknown): void;
+    getExtensionURLs(): Record<string, string>;
+    isExtensionURLLoaded(url: string): boolean;
+    allAsyncExtensionsLoaded(): Promise<void> | undefined;
 
     runtime: Runtime;
     _loadedExtensions: Map<string, string>;
@@ -1041,7 +1089,7 @@ declare namespace VM {
     /**
      * @param extensionId Specified which extension to refresh. Added by TW.
      */
-    refreshBlocks(extensionId?: string): Promise<void[]>;
+    refreshBlocks(extensionId?: string): Promise<void | void[]>;
 
     isExtensionLoaded(extensionID: string): boolean;
 
@@ -1054,7 +1102,7 @@ declare namespace VM {
     /**
      * Load a remote extension. Does not work on scratch.mit.edu.
      */
-    loadExtensionURL(extensionID: string): Promise<number>;
+    loadExtensionURL(extensionID: string): Promise<void>;
   }
 
   /**
@@ -1136,6 +1184,9 @@ declare namespace VM {
   }
 
   interface KeyboardData {
+    // TW
+    keyCode?: number;
+
     key: string;
     isDown: boolean;
   }
@@ -1144,6 +1195,8 @@ declare namespace VM {
     // TW
     _usedKeys: Set<string>;
     hasUsedKey(scratchKey: string): boolean;
+    lastKeyPressed: string;
+    getLastKeyPressed(): string;
 
     runtime: Runtime;
     postData(data: KeyboardData): void;
@@ -1153,6 +1206,9 @@ declare namespace VM {
   }
 
   interface MouseData {
+    // TW
+    button?: number;
+
     x?: number;
     y?: number;
     canvasWidth?: number;
@@ -1162,6 +1218,14 @@ declare namespace VM {
   }
 
   interface Mouse {
+    // TW
+    usesRightClickDown: boolean;
+    /**
+     * tw: Get the down state of a specific button of the mouse.
+     * @param button The ID of the button. 0 = left, 1 = middle, 2 = right
+     */
+    getButtonIsDown(button: number): boolean;
+
     runtime: Runtime;
     _clientX: number;
     _clientY: number;
@@ -1420,6 +1484,14 @@ declare namespace VM {
     isPackaged: boolean;
     externalCommunicationMethods: Record<string, boolean>;
     enforcePrivacy: boolean;
+    /**
+     * True if an external communication method exists and enforcePrivacy is enabled.
+     * Do not update directly; changed via functions that call updatePrivacy().
+     */
+    privacyRestrictionsActive: boolean;
+    totalAssetRequests: number;
+    finishedAssetRequests: number;
+    wrapAssetRequest<T>(callback: () => Promise<T>): Promise<T>;
     extensionManager: ExtensionManager;
     fontManager: FontManager;
     emitCompileError(target: Target, error: unknown): void;
@@ -1432,7 +1504,7 @@ declare namespace VM {
     convertToPackagedRuntime(): void;
     resetAllCaches(): void;
     addAddonBlock(addonBlock: AddonBlockOptions): void;
-    getAddonBlock(procedureCode: string): AddonBlock;
+    getAddonBlock(procedureCode: string): AddonBlock | null;
     findProjectOptionsComment(): Comment | null;
     parseProjectOptions(): void;
     _generateAllProjectOptions(): unknown; // TODO
@@ -1650,11 +1722,6 @@ declare namespace VM {
      */
     currentStepTime: number | null;
 
-    /**
-     * Interval ID returned by setInterval(). null if accessed before the project has started.
-     */
-    _steppingInterval: number | null;
-
     redrawRequested: boolean;
 
     requestRedraw(): void;
@@ -1790,6 +1857,12 @@ declare class VM extends EventEmitter<VM.VirtualMachineEventMap> {
   enableDebug(): string;
   getExportedCostume(costume: VM.Costume): Uint8Array;
   getExportedCostumeBase64(costume: VM.Costume): string;
+  serializeAssets(targetId?: string): Array<{
+    fileName: string;
+    fileContent: Uint8Array;
+  }>;
+  exportStandaloneBlocks(blockObjects: VM.Block[]): object;
+  handleExtensionButtonPress(buttonData: unknown): void;
   securityManager: VM.SecurityManager;
   exports: {
     Sprite: {
@@ -1900,7 +1973,8 @@ declare class VM extends EventEmitter<VM.VirtualMachineEventMap> {
   saveProjectSb3<T extends keyof JSZip.OutputTypes>(type: T): Promise<JSZip.OutputTypes[T]>;
   saveProjectSb3(): Promise<Blob>;
 
-  toJSON(targetId?: string): string;
+  // TW: add serializationOptions
+  toJSON(targetId?: string, serializationOptions?: unknown): string;
 
   /**
    * @see {VM.Runtime.getEditingTarget}

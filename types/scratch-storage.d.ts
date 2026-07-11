@@ -38,6 +38,9 @@ declare namespace ScratchStorage {
   }
 
   class Asset {
+    // TW
+    clean: boolean;
+
     constructor(assetType: AssetType, assetId: string, dataFormat: DataFormat | null, data: Uint8Array, generateId?: boolean);
 
     assetType: AssetType;
@@ -63,7 +66,8 @@ declare namespace ScratchStorage {
     dependencies: [];
   }
 
-  type UrlFunction = (asset: Asset) => string;
+  // TW: may also return a fetch request-config object, or false to skip the store
+  type UrlFunction = (asset: Asset) => string | object | false;
 
   interface Helper {
     parent: ScratchStorage;

@@ -27,7 +27,7 @@ declare namespace Scratch {
   const renderer: RenderWebGL;
   // Permission requests here always return a promise, but the security manager methods themselves
   // can return either a boolean or promise.
-  function fetch(url: string, options?: RequestInit): Promise<Response>;
+  function fetch(url: string | Request, options?: RequestInit): Promise<Response>;
   function canFetch(url: string): Promise<boolean>;
   function openWindow(url: string, features?: string): Promise<Window | null>;
   function canOpenWindow(url: string): Promise<boolean>;
@@ -333,6 +333,10 @@ declare namespace Scratch {
      * Defaults to false.
      */
     disableMonitor?: boolean;
+    /**
+     * If this block is a reporter, this is the scope/context for its value. Defaults to 'global'.
+     */
+    reporterScope?: 'global' | 'target';
   }
   interface LoopBlock extends ExecutableBlock {
     blockType: 'loop';

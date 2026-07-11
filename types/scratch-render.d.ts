@@ -116,6 +116,7 @@ declare namespace RenderWebGL {
   class Silhouette {
     // TW
     unlazy(): void;
+    _lazyData: BitmapData | null;
 
     static _updateCanvas(): HTMLCanvasElement;
 
@@ -245,6 +246,16 @@ declare namespace RenderWebGL {
   }
 
   class PenSkin extends Skin {
+    // TW
+    renderQuality: number;
+    setRenderQuality(quality: number): void;
+    _nativeSize: [number, number];
+    _flushLines(): void;
+    _drawPenTexture(texture: WebGLTexture): void;
+    _drawTextureRegionId: DrawingRegion;
+    _enterDrawTexture(): void;
+    _exitDrawTexture(): void;
+
     _renderer: RenderWebGL;
 
     _size: [number, number];
@@ -262,7 +273,6 @@ declare namespace RenderWebGL {
     _enterUsePenBuffer(): void;
     _exitUsePenBuffer(): void;
 
-    _lineBufferInfo: twgl.BufferInfo;
     _lineShader: Shader;
 
     clear(): void;
@@ -306,6 +316,10 @@ declare namespace RenderWebGL {
   class TextBubbleSkin extends Skin {
     // TW
     readonly _style: Readonly<TextBubbleStyle>;
+    /**
+     * Change style used for rendering the bubble. Properties not specified will be unchanged.
+     * Given argument will be copied internally, so you can freely change it later without affecting the skin.
+     */
     setStyle(newStyles: Partial<TextBubbleStyle>): void;
 
     _renderer: RenderWebGL;
@@ -465,6 +479,11 @@ declare class RenderWebGL extends EventEmitter<RenderWebGL.ScratchRenderEventMap
   useHighQualityRender: boolean;
   offscreenTouching: boolean;
   dirty: boolean;
+  /**
+   * Whether projects should be able to access the contents of private skins such as webcams.
+   * If set to false, routines such as isTouchingColor will ignore private skins.
+   * Private skins will still be rendered on the canvas regardless of this setting.
+   */
   allowPrivateSkinAccess: boolean;
   setUseHighQualityRender(enabled: boolean): void;
   _updateRenderQuality(): void;
@@ -478,6 +497,10 @@ declare class RenderWebGL extends EventEmitter<RenderWebGL.ScratchRenderEventMap
   setCustomFonts(customFonts: Record<string, string>): void;
   addOverlay(element: HTMLElement, mode?: RenderWebGL.OverlayMode): RenderWebGL.Overlay;
   removeOverlay(element: HTMLElement): void;
+  /**
+   * Element that contains all overlays.
+   */
+  overlayContainer: HTMLElement;
   _overlays: RenderWebGL.Overlay[];
   _updateOverlays(): void;
   exports: {
@@ -508,7 +531,15 @@ declare class RenderWebGL extends EventEmitter<RenderWebGL.ScratchRenderEventMap
       transformColor(drawable: RenderWebGL.Drawable, inOutColor: Uint8ClampedArray, effectMask?: number): Uint8ClampedArray;
     };
   }
+  /**
+   * Suggested maximum texture size in texels. This is not a hard limit.
+   */
   maxTextureDimension: number;
+  /**
+   * Modify the suggested maximum texture dimension. This should be set before any skins are created.
+   * @param newMax The new maximum in texels
+   */
+  setMaxTextureDimension(newMax: number): void;
   _penSkinId: number | null;
 
   static isSupported(canvas?: HTMLCanvasElement): boolean;
@@ -521,7 +552,7 @@ declare class RenderWebGL extends EventEmitter<RenderWebGL.ScratchRenderEventMap
   static _getContext(canvas: HTMLCanvasElement): RenderWebGL.AnyWebGLContext | null;
 
   // TW: converted to instance method; returns 4th channel for alpha
-  sampleColor4b(vector: twgl.V3, drawableIds: number[], destination?: Uint8ClampedArray): Uint8ClampedArray;
+  sampleColor4b(vector: twgl.V3, drawables: ReturnType<RenderWebGL['_candidatesTouching']>, destination?: Uint8ClampedArray): Uint8ClampedArray;
 
   constructor(canvas: HTMLCanvasElement, xLeft?: number, xRight?: number, yBottom?: number, yTop?: number);
 
@@ -548,6 +579,9 @@ declare class RenderWebGL extends EventEmitter<RenderWebGL.ScratchRenderEventMap
   draw(): void;
 
   _drawThese(drawableIds: number[], drawMode: RenderWebGL.DrawMode, projection: twgl.M4, opts?: {
+    // TW
+    skipPrivateSkins?: boolean;
+
     filter?: (drawableId: number) => boolean;
     extraUniforms?: object;
     effectMask?: RenderWebGL.EffectMask;
