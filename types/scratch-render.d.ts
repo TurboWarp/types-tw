@@ -9,7 +9,7 @@ declare namespace RenderWebGL {
   type OverlayMode = 'scale' | 'scale-centered' | 'manual';
   interface Overlay {
     mode: OverlayMode;
-    root: HTMLElement;
+    container: HTMLElement;
     userElement: HTMLElement;
   }
   interface TextBubbleStyle {
