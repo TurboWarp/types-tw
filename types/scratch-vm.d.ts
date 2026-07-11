@@ -1086,6 +1086,18 @@ declare namespace VM {
     getFrame(frameInfo: {
       dimensions?: [number, number];
       mirror?: boolean;
+      format?: 'image-data';
+      cacheTimeout?: number;
+    }): ImageData | null;
+    getFrame(frameInfo: {
+      dimensions?: [number, number];
+      mirror?: boolean;
+      format?: 'canvas';
+      cacheTimeout?: number;
+    }): HTMLCanvasElement | null;
+    getFrame(frameInfo: {
+      dimensions?: [number, number];
+      mirror?: boolean;
       format?: 'image-data' | 'canvas' | string;
       cacheTimeout?: number;
     }): ImageData | HTMLCanvasElement | string | null;
@@ -1764,7 +1776,7 @@ declare class VM extends EventEmitter<VM.VirtualMachineEventMap> {
    */
   addSprite(data: ArrayBufferView | ArrayBuffer | string | object): Promise<void>;
 
-  addCostume(md5ext: string, costume?: VM.Costume, targetId?: string, version?: 2): Promise<void>;
+  addCostume(md5ext: string, costume?: Partial<VM.Costume>, targetId?: string, version?: 2): Promise<void>;
 
   addCostumeFromLibrary(md5ext: string, costume: Partial<VM.Costume>): Promise<void>;
 
