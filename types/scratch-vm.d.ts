@@ -28,6 +28,13 @@ declare namespace VM {
     running: boolean;
     framerate: number;
     interpolation: number;
+    _stepAnimation?: {
+      cancel(): void
+    };
+    _interpolationAnimation?: {
+      cancel(): void
+    };
+    _stepInterval?: ReturnType<typeof setInterval>;
     setFramerate(framerate: number): void;
     setInterpolation(interpolation: boolean): void;
     stepCallback(): void;
