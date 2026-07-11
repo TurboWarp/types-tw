@@ -47,6 +47,7 @@ declare namespace RenderWebGL {
     Fisheye = 'fisheye',
     Whirl = 'whirl',
     Pixelate = 'pixelate',
+    Mosaic = 'mosaic',
     Brightness = 'brightness',
     Ghost = 'ghost'
   }
@@ -79,6 +80,11 @@ declare namespace RenderWebGL {
     snapToInt(): void;
   }
 
+  namespace Rectangle {
+    function intersect(a: Rectangle, b: Rectangle, result?: Rectangle): Rectangle;
+    function union(a: Rectangle, b: Rectangle, result?: Rectangle): Rectangle;
+  }
+
   /**
    * Suggested properties of a drawing region. Strictly, this can really be whatever you want it to be.
    */
@@ -102,7 +108,7 @@ declare namespace RenderWebGL {
     static DRAW_MODE: Record<DrawMode, DrawMode>;
 
     _gl: AnyWebGLContext;
-    _shaderCache: Record<DrawMode, Record<EffectMask, twgl.ProgramInfo[]>>;
+    _shaderCache: Record<DrawMode, twgl.ProgramInfo[]>;
     _buildShader(drawMode: DrawMode, effectMask: EffectMask): twgl.ProgramInfo;
     getShader(drawMode: DrawMode, effectMask: EffectMask): twgl.ProgramInfo;
   }
@@ -128,8 +134,8 @@ declare namespace RenderWebGL {
     colorAtNearest(textureCoordinate: twgl.V3, destination?: Uint8ClampedArray): Uint8ClampedArray;
     colorAtLinear(textureCoordinate: twgl.V3, destination?: Uint8ClampedArray): Uint8ClampedArray;
 
-    isTouchingNearest(textureCoordinate: twgl.V3): void;
-    isTouchingLinear(textureCoordinate: twgl.V3): void;
+    isTouchingNearest(textureCoordinate: twgl.V3): boolean;
+    isTouchingLinear(textureCoordinate: twgl.V3): boolean;
   }
 
   // TW: Skin is not an EventListener
@@ -160,10 +166,10 @@ declare namespace RenderWebGL {
       u_skinSize: [number, number];
       u_skin: WebGLTexture | null;
     };
-    getUniforms(): Skin['_uniforms'];
+    getUniforms(scale?: [number, number]): Skin['_uniforms'];
 
     _silhouette: Silhouette;
-    updateSilhouette(scale?: [number, number]): void;
+    updateSilhouette(): void;
 
     /**
      * @see {Silhouette.isTouchingNearest}
@@ -181,7 +187,11 @@ declare namespace RenderWebGL {
     _setTexture(image: BitmapData): void;
     setEmptyImageData(): void;
 
-    getFenceBounds(): Rectangle;
+    /**
+     * Get the bounds of the drawable for determining its fenced position.
+     * For compatibility with Scratch 2, we always use getAABB.
+     */
+    getFenceBounds(drawable: Drawable, result?: Rectangle): Rectangle;
 
     dispose(): void;
   }
@@ -230,8 +240,8 @@ declare namespace RenderWebGL {
     /**
      * Pen color in RGBA from 0-1.
      */
-    color4f: [number, number, number, number];
-    diameter: number;
+    color4f?: [number, number, number, number];
+    diameter?: number;
   }
 
   class PenSkin extends Skin {
@@ -308,6 +318,7 @@ declare namespace RenderWebGL {
       width: number;
       height: number
     };
+    _text: string;
     _bubbleType: TextBubbleType;
     _pointsLeft: boolean;
     _textDirty: boolean;
@@ -402,7 +413,7 @@ declare namespace RenderWebGL {
     _convexHullPoints: Array<[number, number]>;
     _convexHullDirty: boolean;
     needsConvexHullPoints(): boolean;
-    setConvexHullDirty(): boolean;
+    setConvexHullDirty(): void;
     setConvexHullPoints(points: Array<[number, number]>): void;
 
     _transformedHullPoints: Array<[number, number]>;
@@ -421,6 +432,11 @@ declare namespace RenderWebGL {
     getFastBounds(result?: Rectangle): Rectangle;
 
     updateCPURenderAttributes(): void;
+    /**
+     * Check if the world position touches the skin.
+     * The caller is responsible for ensuring this drawable's inverse matrix & its skin's silhouette are up-to-date.
+     * @see updateCPURenderAttributes
+     */
     isTouching(textureCoordinate: twgl.V3): boolean;
     _isTouchingNearest(textureCoordinate: twgl.V3): boolean;
     _isTouchingLinear(textureCoordinate: twgl.V3): boolean;
