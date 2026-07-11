@@ -40,6 +40,7 @@ declare namespace Scratch {
   function canEmbed(url: string): Promise<boolean>;
   function canDownload(url: string, name: string): Promise<boolean>;
   function download(url: string, name: string): Promise<void>;
+  function canGeolocate(): Promise<boolean>;
   namespace Cast {
     function toNumber(value: unknown): number;
     function toString(value: unknown): string;
