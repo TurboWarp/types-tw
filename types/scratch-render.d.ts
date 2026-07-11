@@ -332,6 +332,8 @@ declare namespace RenderWebGL {
   class Drawable {
     // TW
     interactive: boolean;
+    _highQuality: boolean;
+    setHighQuality(highQuality: boolean): void;
 
     static color4fFromID(id: number): [number, number, number, number];
     static color3bToID(r: number, g: number, b: number): number;
