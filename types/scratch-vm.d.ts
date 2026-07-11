@@ -140,6 +140,8 @@ declare namespace VM {
      */
     md5?: string;
 
+    md5ext?: string;
+
     name: string;
 
     /** TW: asset may be null in packaged runtime mode (runtime.isPackaged) */
@@ -452,7 +454,7 @@ declare namespace VM {
   }
 
   const enum RotationStyle {
-    AllAround = 'all-around',
+    AllAround = 'all around',
     LeftRight = 'left-right',
     None = "don't rotate"
   }
@@ -494,6 +496,8 @@ declare namespace VM {
     isOriginal: boolean;
 
     isStage: boolean;
+
+    dragging: boolean;
 
     /**
      * Returns true if the target is not the stage and is not a clone.
@@ -688,7 +692,7 @@ declare namespace VM {
     tempo: number;
 
     videoTransparency: number;
-
+    videoState: 'off' | 'on' | 'on-flipped';
 
     /**
      * Create a clone of this sprite if the clone limit has not been reached.
@@ -896,6 +900,7 @@ declare namespace VM {
     securityManager: SecurityManager;
 
     runtime: Runtime;
+    _loadedExtensions: Map<string, string>;
 
     /**
      * @param extensionId Specified which extension to refresh. Added by TW.
@@ -1064,7 +1069,22 @@ declare namespace VM {
   }
 
   interface Video {
-    // TODO
+    _drawable: number;
+    mirror: boolean;
+    readonly videoReady: boolean;
+
+    enableVideo(): Promise<Video> | null;
+    disableVideo(): void;
+
+    getFrame(frameInfo: {
+      dimensions?: [number, number];
+      mirror?: boolean;
+      format?: 'image-data' | 'canvas' | string;
+      cacheTimeout?: number;
+    }): ImageData | HTMLCanvasElement | string | null;
+
+    setPreviewGhost(ghost: number): void;
+
     postData(data: VideoData): void;
   }
 
@@ -1739,11 +1759,11 @@ declare class VM extends EventEmitter<VM.VirtualMachineEventMap> {
 
   addCostume(md5ext: string, costume?: VM.Costume, targetId?: string, version?: 2): Promise<void>;
 
-  addCostumeFromLibrary(md5ext: string, costume: VM.Costume): Promise<void>;
+  addCostumeFromLibrary(md5ext: string, costume: Partial<VM.Costume>): Promise<void>;
 
   addBackdrop(md5ext: string, costume?: VM.Costume): Promise<void>;
 
-  addSound(sound: VM.Sound, targetId?: string): Promise<void>;
+  addSound(sound: Partial<VM.Sound>, targetId?: string): Promise<void>;
 
   duplicateSprite(targetId: string): Promise<void>;
 

@@ -163,7 +163,7 @@ declare namespace RenderWebGL {
     getUniforms(): Skin['_uniforms'];
 
     _silhouette: Silhouette;
-    updateSilhouette(): void;
+    updateSilhouette(scale?: [number, number]): void;
 
     /**
      * @see {Silhouette.isTouchingNearest}
@@ -177,7 +177,7 @@ declare namespace RenderWebGL {
 
     useNearest(scale: [number, number], drawable: Drawable): boolean;
 
-    getTexture(scale: [number, number]): WebGLTexture;
+    getTexture(scale?: [number, number]): WebGLTexture;
     _setTexture(image: BitmapData): void;
     setEmptyImageData(): void;
 
@@ -238,7 +238,7 @@ declare namespace RenderWebGL {
     _renderer: RenderWebGL;
 
     _size: [number, number];
-    _framebuffer: WebGLFramebuffer;
+    _framebuffer: twgl.FrameBufferInfo;
     _silhouetteDirty: boolean;
     _silhouettePixels: Uint8Array;
     _silhouetteImageData: ImageData;
@@ -365,7 +365,7 @@ declare namespace RenderWebGL {
 
     _scale: twgl.V3;
     get scale(): twgl.V3;
-    updateScale(scale: number): void;
+    updateScale(scale: [number, number]): void;
 
     _direction: number;
     updateDirection(direction: number): void;
@@ -656,7 +656,7 @@ declare class RenderWebGL extends EventEmitter<RenderWebGL.ScratchRenderEventMap
   pick(centerX: number, centerY: number, width?: number, height?: number, candidateIds?: number[]): number | -1;
 
   extractDrawableScreenSpace(drawableId: number): {
-    data: ImageData;
+    imageData: ImageData;
     x: number;
     y: number;
     width: number;
