@@ -42,8 +42,13 @@ declare namespace Scratch {
   function download(url: string, name: string): Promise<void>;
   function canGeolocate(): Promise<boolean>;
   namespace Cast {
+    // toNumber is not redundant on numbers; NaN becomes 0
     function toNumber(value: unknown): number;
+    /** @deprecated You are casting a string to a string. This is redundant and does nothing. You should remove the cast or fix the inaccurate types. */
+    function toString(value: string): string;
     function toString(value: unknown): string;
+    /** @deprecated You are casting a boolean to a boolean. This is redundant and does nothing.. You should remove the cast or fix the inaccurate types. */
+    function toBoolean(value: boolean): boolean;
     function toBoolean(value: unknown): boolean;
     /**
      * @returns 0 if a == b, less than 0 if b is greater, greater than 0 if a is greater.
