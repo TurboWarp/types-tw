@@ -149,6 +149,7 @@ declare namespace AudioEngine {
     effectChainPrime: EffectChain;
 
     addSoundPlayer(soundPlayer: SoundPlayer): void;
+    removeSoundPlayer(soundId: string): void;
     getSoundPlayer(soundId: string): SoundPlayer | undefined;
     getSoundEffects(soundId: string): EffectChain;
     playSound(target: Target, soundId: string): Promise<void>;

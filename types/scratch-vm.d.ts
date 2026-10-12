@@ -205,10 +205,19 @@ declare namespace VM {
     addCostumeAt(costumeObject: Costume, index: number): void;
 
     /**
-     * Delete a costume by index.
+     * Delete a costume by index. Does not destroy its skin.
      * @returns The deleted costume, or undefined if none existed at that index.
      */
     deleteCostumeAt(index: number): Costume | undefined;
+
+    deleteCostume(index: number): Costume | null;
+
+    /**
+     * Does not dispose its sound player.
+     */
+    deleteSoundAt(index: number): Sound | undefined;
+
+    deleteSound(index: number): Sound | null;
 
     /**
      * Disconnect a clone from this sprite. The clone is unmodified; in particular its dispose() is not called.
@@ -1958,7 +1967,7 @@ declare class VM extends EventEmitter<VM.VirtualMachineEventMap> {
 
   deserializeProject(json: object, zip?: JSZip): Promise<void>;
 
-  installTargets(targets: VM.Target[], extensions: VM.ImportedExtensionsInfo, wholeProject: boolean): Promise<void>;
+  installTargets(targets: VM.Target[], extensions: VM.ImportedExtensionsInfo, wholeProject: boolean, layerOrder?: number[]): Promise<void>;
 
   /**
    * @deprecated
@@ -2069,13 +2078,13 @@ declare class VM extends EventEmitter<VM.VirtualMachineEventMap> {
    * Deletes the costume at a given index int he editing target.
    * @returns If a costume was deleted, returns a function to undo the deletion.
    */
-  deleteCostume(costumeIndex: number): (() => void) | null;
+  deleteCostume(costumeIndex: number): (() => Promise<void>) | null;
 
   /**
    * Deletes the sound at a given index in the editing target.
    * @returns If a sound was deleted, returns a function to undo the deletion.
    */
-  deleteSound(soundIndex: number): (() => void) | null;
+  deleteSound(soundIndex: number): (() => Promise<void>) | null;
 
   /**
    * Returns a promise that resolves when all required extensions have been imported.
